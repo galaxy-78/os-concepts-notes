@@ -50,6 +50,6 @@
 
 ## 📬 Contact
 
-작성자: 김재원
-Email: magry78@gmail.com
-LinkedIn / Blog / Portfolio: ...
+- 작성자: 김재원
+- Email: magry78@gmail.com
+- LinkedIn / Blog / Portfolio: ...
