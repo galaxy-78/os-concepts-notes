@@ -133,6 +133,31 @@ raises -> catches -> dispatches -> clears
 2. 장치에 맞는 interrupt handler로 효율적으로 보내는 방법이 필요하다.
 3. multilevel interrupts가 필요하기 때문에, 운영체제는 높고 낮은 우선순위 인터럽트들을 구별할 수 있어야 하고 긴급의 적절한 정도에 맞춰 대응할 수 있어야 한다.
 
+대부분의 CPU는 두 개의 interrupt-request line을 가진다.
+하나는 nonmaskable interrupt (: unrecoverable memory error 같은 이벤트에 사용).
+두번째는 maskable interrupt (: 이 인터럽트는 반드시 인터럽트(중단)되어서는 안되는 중요한 명령들이 실행되기 전에 CPU에 의해 꺼질 수 있다.); 디바이스 컨트롤러가 CPU에 서비스 요청할 때 사용.
+
+- maskable?: 인터럽트 무시 가능.
+
+하지만, 사실, 컴퓨터는 인터럽트 벡터들 보다 더 많은 device들을 가진다. (메모리가 부족할 수 있다.)
+-> 이 문제 해결을 위해서 하나의 vector를 인터럽트 핸들러들의 리스트를 넣는 'interrupt chaining'이라는 것을 사용한다.
+
+interrupt vector는 정해져있는데, intel에서는 0~31까지는 nonmaskable, 32~255는 maskable 로 사용.
+
+'interrupt priority levels' 존재. (interrupt vector 숫자와는 무관.)
+-> 낮은 우선 순위의 인터럽트를 막아서 연기하고, 높은 우선 순위의 인터럽트를 실행할 수 있도록 한다.
+
+#### 1.2.2 Storage Structure
+
+CPU는 오직 메모리로부터만 명령을 로드할 수 있고, 그렇기에 어떤 프로그램이든 실행을 위해서는 메모리에서 로드되어야 한다. 컴퓨터는 대부분의 프로그램을 '메인 메모리'(RAM; random-access memory)에서 실행한다. 일반적으로 RAM은 반도체(DRAM; dynamic random-access memory)로 되어있다.
+
+- other memory
+  - bootstrap program: 컴퓨터 power 킬때 맨 처음 실행되는 프로그램. 운영체제 로드.
+    - RAM은 휘발성(volatile) 메모리이다. 전원이 꺼지면 데이터가 다 날아간다.
+    - 그래서 RAM에 bootstrap program을 맡기지 않는다.
+    - 대신에, EEPROM과 firmware를 사용한다. -> 자주 변경되지 않고, 비휘발성 저장.
+    - EEPROM: 변경될 수 있지만 자주 변경되지 않는다. 느리고 대부분 정적인 프로그램과 데이터를 담고 있다.
+
 예시:
 
 💡 운영체제 비유로 이해하기
